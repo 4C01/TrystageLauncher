@@ -19,12 +19,14 @@ namespace trystageClient
     
     public partial class TrystageLauncher: Form
     {
-
-        public String JavaLocation;
+        public string ClientVersion = "TrystageClient"; //version in versions folder
+        public string ClientzipUrl = "http://files.tsmp.top/TrystageClient.zip"; //Client Zip,contain assets,library,and version
+        public string JavazipUrl = "http://files.tsmp.top/jre8.zip"; //Java Zip,using zulu tsmp mirrior,unzip will get jre8 folder
+        public string installDir = "C:\\TrystageClient"; //setup folder,must using \ not /
+        public string ClientLocation = "C:/TrystageClient"; //Java running Location, using / not \
+        public string JavaLocation;
         public async Task InstallJava()
         {
-            string installDir = @"C:\TrystageClient";
-            string zipUrl = "http://files.tsmp.top/jre8.zip";
 
             try
             {
@@ -35,7 +37,7 @@ namespace trystageClient
                 string tempZip = Path.GetTempFileName();
                 using (WebClient client = new WebClient())
                 {
-                    await DownloadWithResume(zipUrl, tempZip);
+                    await DownloadWithResume(JavazipUrl, tempZip);
                 }
 
                 // 3. 解压到目标目录
@@ -77,8 +79,6 @@ namespace trystageClient
         }
         public async Task InstallClient()
         {
-            string installDir = @"C:\TrystageClient";
-            string zipUrl = "http://files.tsmp.top/TrystageClient.zip";
 
             try
             {
@@ -89,7 +89,7 @@ namespace trystageClient
                 string tempZip = Path.GetTempFileName();
                 using (WebClient client = new WebClient())
                 {
-                    await DownloadWithResume(zipUrl, tempZip);
+                    await DownloadWithResume(ClientzipUrl, tempZip);
                 }
 
                 // 3. 解压到目标目录
@@ -131,13 +131,13 @@ namespace trystageClient
         {
             return new StringBuilder()
                 .Append($"-Xmx2G ")
-                .Append($"-Djava.library.path=C:/TrystageClient/.minecraft/versions/TrystageClient/TrystageClient-natives ")
+                .Append($"-Djava.library.path={ClientLocation}/.minecraft/versions/{version}/{version}-natives ")
                 .Append($"-cp {GetClassPath(version)} ")
                 .Append($"net.minecraft.client.main.Main ")
                 .Append($"--username {username} ")
                 .Append($"--version {version} ")
-                .Append($"--gameDir C:/TrystageClient/.minecraft ")
-                .Append($"--assetsDir C:/TrystageClient/.minecraft/assets ")
+                .Append($"--gameDir {ClientLocation}/.minecraft ")
+                .Append($"--assetsDir {ClientLocation}/.minecraft/assets ")
                 .Append($"--assetIndex 1.8 ")
                 .Append($"--uuid {GetOfflineUUID(username)} ")
                 .Append($"--accessToken 0 ")
@@ -157,10 +157,10 @@ namespace trystageClient
         }
         string GetClassPath(string version)
         {
-            var libs = Directory.GetFiles($"C:/TrystageClient/.minecraft/libraries/", "*.jar", SearchOption.AllDirectories);
+            var libs = Directory.GetFiles($"{ClientLocation}/.minecraft/libraries/", "*.jar", SearchOption.AllDirectories);
             // 替换反斜杠为正斜杠
             var normalizedLibs = libs.Select(path => path.Replace('\\', '/'));
-            return string.Join(";", normalizedLibs) + $";C:/TrystageClient/.minecraft/versions/{version}/{version}.jar";
+            return string.Join(";", normalizedLibs) + $";{ClientLocation}/.minecraft/versions/{version}/{version}.jar";
         }
         public TrystageLauncher()
         {
@@ -175,9 +175,9 @@ namespace trystageClient
             this.BackColor = Color.White;
             Label lblTitle = new Label
             {
-                Text = "Trystage Client",
+                Text = "TrystageLauncher",
                 Font = new Font("微软雅黑", 20), // 系统自带字体
-                Location = new Point(30, 50),
+                Location = new Point(25, 50),
                 AutoSize = true // 自动适应文字大小
             };
             this.Controls.Add(lblTitle);
@@ -198,7 +198,7 @@ namespace trystageClient
                 ForeColor = Color.DarkBlue,
                 BorderStyle = BorderStyle.Fixed3D
             };
-            txtPlayerName.Padding = new Padding(8);
+            txtPlayerName.Padding = new Padding(10);
             this.Controls.Add(txtPlayerName);
             Label lblJavaLoc = new Label
             {
@@ -217,7 +217,7 @@ namespace trystageClient
                 BorderStyle = BorderStyle.Fixed3D
             };
 
-            txtJavaLocation.Padding = new Padding(8);
+            txtJavaLocation.Padding = new Padding(10);
             this.Controls.Add(txtJavaLocation);
             // 创建按钮实例
             Button startButton = new Button();
@@ -245,7 +245,7 @@ namespace trystageClient
                 if (txtJavaLocation.Text != "") { javalocs = txtJavaLocation.Text; }
                 else { javalocs = "java"; }
                 bool hasCustomJava = IsJava8Installed(javalocs);
-                bool hasDefaultJava = IsJava8Installed("C:\\TrystageClient\\jre8\\bin\\java.exe");
+                bool hasDefaultJava = IsJava8Installed(installDir + "\\jre8\\bin\\java.exe");
 
                 if (!hasCustomJava && !hasDefaultJava)
                 {
@@ -275,8 +275,8 @@ namespace trystageClient
                     }
                 }
                     if (hasCustomJava) { JavaLocation = javalocs; }
-                    if (hasDefaultJava) { JavaLocation = "C:\\TrystageClient\\jre8\\bin\\java.exe"; }
-                if (!Directory.Exists("C:\\TrystageClient\\.minecraft"))
+                    if (hasDefaultJava) { JavaLocation = installDir + "\\jre8\\bin\\java.exe"; }
+                if (!Directory.Exists(installDir + "\\.minecraft"))
                 {
                     MessageBox.Show("正在为您安装游戏本体!");
                     await InstallClient();
@@ -288,7 +288,7 @@ namespace trystageClient
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
-                    Arguments = $"/c \"{JavaLocation}\" {GenerateLaunchArgs(txtPlayerName.Text, "TrystageClient")} & pause",
+                    Arguments = $"/c \"{JavaLocation}\" {GenerateLaunchArgs(txtPlayerName.Text, ClientVersion)} & pause",
                     WorkingDirectory = AppContext.BaseDirectory,
                     UseShellExecute = true
                 };
