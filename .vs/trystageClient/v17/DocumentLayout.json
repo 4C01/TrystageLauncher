@@ -1,0 +1,85 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\dotnet\\trystageClient\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|trystageClient||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|E:\\dotnet\\trystageClient\\trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|E:\\dotnet\\trystageClient\\trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|E:\\dotnet\\trystageClient\\trystagelauncher.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:trystagelauncher.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|e:\\dotnet\\trystageclient\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|cc4014f5-b18d-439c-9352-f99d984cca85"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "trystageClient",
+              "DocumentMoniker": "E:\\dotnet\\trystageClient\\trystageClient.csproj",
+              "RelativeDocumentMoniker": "trystageClient.csproj",
+              "ToolTip": "E:\\dotnet\\trystageClient\\trystageClient.csproj",
+              "RelativeToolTip": "trystageClient.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-31T23:09:22.722Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TrystageLauncher.Designer.cs",
+              "DocumentMoniker": "E:\\dotnet\\trystageClient\\TrystageLauncher.Designer.cs",
+              "RelativeDocumentMoniker": "TrystageLauncher.Designer.cs",
+              "ToolTip": "E:\\dotnet\\trystageClient\\TrystageLauncher.Designer.cs",
+              "RelativeToolTip": "TrystageLauncher.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-31T19:55:02.063Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TrystageLauncher.cs [\u8BBE\u8BA1]",
+              "DocumentMoniker": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs",
+              "RelativeDocumentMoniker": "TrystageLauncher.cs",
+              "ToolTip": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs [\u8BBE\u8BA1]",
+              "RelativeToolTip": "TrystageLauncher.cs [\u8BBE\u8BA1]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-31T19:41:11.642Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TrystageLauncher.cs",
+              "DocumentMoniker": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs",
+              "RelativeDocumentMoniker": "TrystageLauncher.cs",
+              "ToolTip": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs",
+              "RelativeToolTip": "TrystageLauncher.cs",
+              "ViewState": "AgIAAJMAAAAAAAAAAAAIwKgAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-31T19:39:25.849Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
