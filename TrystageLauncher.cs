@@ -20,9 +20,9 @@ namespace trystageClient
     public partial class TrystageLauncher: Form
     {
         string ClientVersion = "TrystageClient"; //version in versions folder
-        string remoteVersionUrl = "http://files.tsmp.top/version.txt"; //version check url
-        string ClientzipUrl = "http://files.tsmp.top/TrystageClient.zip"; //Client Zip,contain assets,library,and version
-        string JavazipUrl = "http://files.tsmp.top/jre8.zip"; //Java Zip,using zulu tsmp mirrior,unzip will get jre8 folder
+        string remoteVersionUrl = "http://rcn.zyghit.cn/trystage/version.txt"; //version check url
+        string ClientzipUrl = "http://rcn.zyghit.cn/trystage/TrystageClient.zip"; //Client Zip,contain assets,library,and version
+        string JavazipUrl = "http://rcn.zyghit.cn/trystage/jre8.zip"; //Java Zip,using zulu tsmp mirrior,unzip will get jre8 folder
         string installDir = "C:\\TrystageClient"; //setup folder,must using \ not /
         string ClientLocation = "C:/TrystageClient"; //Java running Location, using / not \
         string JavaLocation;
@@ -81,7 +81,11 @@ namespace trystageClient
 
         bool HasNewerVersion()
         {
-            string localVersion = File.ReadAllText("version.txt").Trim();
+            if(!File.Exists(installDir + "\\version.txt"))
+            {
+                return true;
+            }
+            string localVersion = File.ReadAllText(installDir + "\\version.txt").Trim();
             string remoteVersion;
 
             using (HttpClient client = new HttpClient())
@@ -99,7 +103,7 @@ namespace trystageClient
                         return true;
                     }
                 }
-                catch (HttpRequestException ex)
+                catch
                 {
                     return false;
                 }
@@ -112,16 +116,17 @@ namespace trystageClient
             {
                 // 1. 创建目录（无需管理员权限，只要用户有C盘写入权）
                 Directory.CreateDirectory(installDir);
-
-                // 2. 下载Zulu JRE（异步）
+                
                 string tempZip = Path.GetTempFileName();
                 using (WebClient client = new WebClient())
                 {
                     await DownloadWithResume(ClientzipUrl, tempZip);
                 }
-
+                Directory.Delete(installDir + "\\.minecraft", recursive: true);
+                File.Delete(installDir + "\\version.txt");
                 // 3. 解压到目标目录
                 ZipFile.ExtractToDirectory(tempZip, installDir);
+                MessageBox.Show($"安装成功！");
             }
             catch (Exception ex)
             {
@@ -289,7 +294,7 @@ namespace trystageClient
                         try
                         {
                             await InstallJava(); // 异步等待
-                            MessageBox.Show("安装成功！");
+                            return;
                         }
                         catch (Exception ex)
                         {
@@ -304,6 +309,13 @@ namespace trystageClient
                 }
                     if (hasCustomJava) { JavaLocation = javalocs; }
                     if (hasDefaultJava) { JavaLocation = installDir + "\\jre8\\bin\\java.exe"; }
+                if (!Directory.Exists(installDir + "\\.minecraft"))
+                {
+                    MessageBox.Show("正在为您安装游戏本体!");
+                    await InstallClient();
+                    MessageBox.Show("安装完毕!");
+                    return;
+                }
                 if (HasNewerVersion())
                 {
                     DialogResult result = MessageBox.Show(
@@ -313,11 +325,11 @@ namespace trystageClient
                     MessageBoxIcon.Question);
                     if (result == DialogResult.OK)
                     {
-                        MessageBox.Show("正在为您安装j8,请稍等");
+                        MessageBox.Show("正在为您安装新版本,请稍等");
                         try
                         {
                             await InstallClient();
-                            MessageBox.Show("安装成功！");
+                            return;
                         }
                         catch (Exception ex)
                         {
@@ -326,13 +338,6 @@ namespace trystageClient
                         }
                     }
 
-                }
-                if (!Directory.Exists(installDir + "\\.minecraft"))
-                {
-                    MessageBox.Show("正在为您安装游戏本体!");
-                    await InstallClient();
-                    MessageBox.Show("安装完毕!");
-                    return;
                 }
                 MessageBox.Show("已找到java和游戏本体!正在启动游戏");
                 Process process = new Process();
