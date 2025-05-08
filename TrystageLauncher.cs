@@ -19,13 +19,14 @@ namespace trystageClient
     
     public partial class TrystageLauncher: Form
     {
-        public string ClientVersion = "TrystageClient"; //version in versions folder
-        public string ClientzipUrl = "http://files.tsmp.top/TrystageClient.zip"; //Client Zip,contain assets,library,and version
-        public string JavazipUrl = "http://files.tsmp.top/jre8.zip"; //Java Zip,using zulu tsmp mirrior,unzip will get jre8 folder
-        public string installDir = "C:\\TrystageClient"; //setup folder,must using \ not /
-        public string ClientLocation = "C:/TrystageClient"; //Java running Location, using / not \
-        public string JavaLocation;
-        public async Task InstallJava()
+        string ClientVersion = "TrystageClient"; //version in versions folder
+        string remoteVersionUrl = "http://files.tsmp.top/version.txt"; //version check url
+        string ClientzipUrl = "http://files.tsmp.top/TrystageClient.zip"; //Client Zip,contain assets,library,and version
+        string JavazipUrl = "http://files.tsmp.top/jre8.zip"; //Java Zip,using zulu tsmp mirrior,unzip will get jre8 folder
+        string installDir = "C:\\TrystageClient"; //setup folder,must using \ not /
+        string ClientLocation = "C:/TrystageClient"; //Java running Location, using / not \
+        string JavaLocation;
+        async Task InstallJava()
         {
 
             try
@@ -77,7 +78,34 @@ namespace trystageClient
                 }
             }
         }
-        public async Task InstallClient()
+
+        bool HasNewerVersion()
+        {
+            string localVersion = File.ReadAllText("version.txt").Trim();
+            string remoteVersion;
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    remoteVersion = client.GetStringAsync(remoteVersionUrl).GetAwaiter().GetResult().Trim();
+                    remoteVersion = remoteVersion.Trim();
+                    if (remoteVersion == localVersion)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    return false;
+                }
+            }
+        }
+        async Task InstallClient()
         {
 
             try
@@ -145,7 +173,7 @@ namespace trystageClient
                 .Append($"--userType legacy")
                 .ToString();
         }
-        public static string GetOfflineUUID(string username)
+        static string GetOfflineUUID(string username)
         {
             // 1. 计算用户名 MD5
             using (MD5 md5 = MD5.Create())
@@ -257,7 +285,7 @@ namespace trystageClient
 
                     if (result == DialogResult.OK)
                     {
-                        MessageBox.Show("正在为您安装j8!");
+                        MessageBox.Show("正在为您安装j8,请稍等");
                         try
                         {
                             await InstallJava(); // 异步等待
@@ -265,7 +293,7 @@ namespace trystageClient
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"安装失败: {ex.Message}");
+                            MessageBox.Show($"j8安装失败: {ex.Message}");
                         }
                         return;
                     }
@@ -276,6 +304,29 @@ namespace trystageClient
                 }
                     if (hasCustomJava) { JavaLocation = javalocs; }
                     if (hasDefaultJava) { JavaLocation = installDir + "\\jre8\\bin\\java.exe"; }
+                if (HasNewerVersion())
+                {
+                    DialogResult result = MessageBox.Show(
+                    "似乎有新的客户端版本",
+                    "是否要安装",
+                    MessageBoxButtons.OKCancel, // 确定=下载，取消=取消
+                    MessageBoxIcon.Question);
+                    if (result == DialogResult.OK)
+                    {
+                        MessageBox.Show("正在为您安装j8,请稍等");
+                        try
+                        {
+                            await InstallClient();
+                            MessageBox.Show("安装成功！");
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"新客户端版本安装失败: {ex.Message}");
+                            return;
+                        }
+                    }
+
+                }
                 if (!Directory.Exists(installDir + "\\.minecraft"))
                 {
                     MessageBox.Show("正在为您安装游戏本体!");
