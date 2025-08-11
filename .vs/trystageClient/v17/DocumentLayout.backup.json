@@ -1,14 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\dotnet\\trystageClient\\",
+  "WorkspaceRootPath": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|e:\\dotnet\\trystageclient\\trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|c:\\users\\astarlc\\source\\repos\\trystagelauncher\\trystagelauncher\\trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|e:\\dotnet\\trystageclient\\trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|c:\\users\\astarlc\\source\\repos\\trystagelauncher\\trystagelauncher\\properties\\resources.resx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:properties\\resources.resx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:trystagelauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|c:\\users\\astarlc\\source\\repos\\trystagelauncher\\trystagelauncher\\trystagelauncher.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:trystagelauncher.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|c:\\users\\astarlc\\source\\repos\\trystagelauncher\\trystagelauncher\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2B3D530-809C-4389-9A91-16559A5A1A90}|trystageClient.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +30,75 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Resources.resx",
+              "DocumentMoniker": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\Properties\\Resources.resx",
+              "RelativeDocumentMoniker": "Properties\\Resources.resx",
+              "ToolTip": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\Properties\\Resources.resx",
+              "RelativeToolTip": "Properties\\Resources.resx",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAnwHwAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-08-11T16:51:09.243Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TrystageLauncher.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\TrystageLauncher.Designer.cs",
+              "RelativeDocumentMoniker": "TrystageLauncher.Designer.cs",
+              "ToolTip": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\TrystageLauncher.Designer.cs",
+              "RelativeToolTip": "TrystageLauncher.Designer.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAAAIoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-11T10:01:00.126Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "TrystageLauncher.cs",
-              "DocumentMoniker": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs",
+              "DocumentMoniker": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\TrystageLauncher.cs",
               "RelativeDocumentMoniker": "TrystageLauncher.cs",
-              "ToolTip": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs*",
-              "RelativeToolTip": "TrystageLauncher.cs*",
-              "ViewState": "AgIAALEAAAAAAAAAAAAhwCIBAABtAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\TrystageLauncher.cs",
+              "RelativeToolTip": "TrystageLauncher.cs",
+              "ViewState": "AgIAAAgBAAAAAAAAAAAuwLoBAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-01T07:41:53.781Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "TrystageLauncher.cs [\u8BBE\u8BA1]",
-              "DocumentMoniker": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs",
+              "DocumentMoniker": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\TrystageLauncher.cs",
               "RelativeDocumentMoniker": "TrystageLauncher.cs",
-              "ToolTip": "E:\\dotnet\\trystageClient\\TrystageLauncher.cs [\u8BBE\u8BA1]*",
-              "RelativeToolTip": "TrystageLauncher.cs [\u8BBE\u8BA1]*",
+              "ToolTip": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\TrystageLauncher.cs [\u8BBE\u8BA1]",
+              "RelativeToolTip": "TrystageLauncher.cs [\u8BBE\u8BA1]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-01T07:41:49.817Z",
               "EditorCaption": " [\u8BBE\u8BA1]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\AstarLC\\source\\repos\\TrystageLauncher\\TrystageLauncher\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-11T09:31:10.942Z",
+              "EditorCaption": ""
             }
           ]
         }
