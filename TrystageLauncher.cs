@@ -13,22 +13,32 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Reflection;
+using System.Runtime.Remoting.Channels;
 
 namespace trystageClient
 {
     
     public partial class TrystageLauncher: Form
     {
-        string ClientVersion = "TrystageClient"; //version in versions folder
-        string remoteVersionUrl = "http://rcn.zyghit.cn/trystage/version.txt"; //version check url
-        string ClientzipUrl = "http://rcn.zyghit.cn/trystage/TrystageClient.zip"; //Client Zip,contain assets,library,and version
-        string JavazipUrl = "http://rcn.zyghit.cn/trystage/jre8.zip"; //Java Zip,using zulu tsmp mirrior,unzip will get jre8 folder
-        string installDir = "C:\\TrystageClient"; //setup folder,must using \ not /
-        string ClientLocation = "C:/TrystageClient"; //Java running Location, using / not \
-        string JavaLocation;
+        //All url time out
+
+        readonly string clientVersion = "TrystageClient"; //version in versions folder
+        readonly string remoteVersionUrl = "http://rcn.zyghit.cn/trystage/version.txt"; //version check url
+        readonly string clientZipUrl = "http://rcn.zyghit.cn/trystage/TrystageClient.zip"; //Client Zip,contain assets,library,and version
+        readonly string javaZipUrl = "http://rcn.zyghit.cn/trystage/jre8.zip"; //Java Zip,using zulu tsmp mirrior,unzip will get jre8 folder
+        readonly string installDir = "C:\\TrystageClient"; //setup folder,must using \ not /
+        readonly string clientLocation = "C:/TrystageClient"; //Java running Location, using / not \
+        string javaLocation;
+
+        readonly static Color transparentWhite = Color.FromArgb(150, 255, 255, 255);
+        readonly static Color transparentlyColor = Color.FromArgb(0, 255, 255, 255);
+
+        /// <summary>
+        /// 异步安装Java 8
+        /// </summary>
+        /// <returns>异步任务</returns>
         async Task InstallJava()
         {
-
             try
             {
                 // 1. 创建目录（无需管理员权限，只要用户有C盘写入权）
@@ -38,7 +48,7 @@ namespace trystageClient
                 string tempZip = Path.GetTempFileName();
                 using (WebClient client = new WebClient())
                 {
-                    await DownloadWithResume(JavazipUrl, tempZip);
+                    await DownloadWithResume(javaZipUrl, tempZip);
                 }
 
                 // 3. 解压到目标目录
@@ -55,6 +65,13 @@ namespace trystageClient
                 MessageBox.Show($"安装失败: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// 异步下载文件
+        /// </summary>
+        /// <param name="url">URL</param>
+        /// <param name="savePath">保存路径</param>
+        /// <returns>异步任务</returns>
         async Task DownloadWithResume(string url, string savePath)
         {
             long existingLength = File.Exists(savePath) ? new FileInfo(savePath).Length : 0;
@@ -79,6 +96,10 @@ namespace trystageClient
             }
         }
 
+        /// <summary>
+        /// 获取是否有新版本
+        /// </summary>
+        /// <returns>是否有新版本</returns>
         bool HasNewerVersion()
         {
             if(!File.Exists(installDir + "\\version.txt"))
@@ -109,9 +130,13 @@ namespace trystageClient
                 }
             }
         }
+
+        /// <summary>
+        /// 异步安装客户端
+        /// </summary>
+        /// <returns>异步任务</returns>
         async Task InstallClient()
         {
-
             try
             {
                 // 1. 创建目录（无需管理员权限，只要用户有C盘写入权）
@@ -120,7 +145,7 @@ namespace trystageClient
                 string tempZip = Path.GetTempFileName();
                 using (WebClient client = new WebClient())
                 {
-                    await DownloadWithResume(ClientzipUrl, tempZip);
+                    await DownloadWithResume(clientZipUrl, tempZip);
                 }
                 Directory.Delete(installDir + "\\.minecraft", recursive: true);
                 File.Delete(installDir + "\\version.txt");
@@ -133,7 +158,13 @@ namespace trystageClient
                 MessageBox.Show($"安装游戏失败: {ex.Message}");
             }
         }
-        bool IsJava8Installed(String javaLoc)
+
+        /// <summary>
+        /// 获取是否安装Java 8
+        /// </summary>
+        /// <param name="javaLoc">Java可执行文件路径</param>
+        /// <returns>是否安装Java 8</returns>
+        bool IsJava8Installed(string javaLoc)
         {
             try
             {
@@ -151,26 +182,35 @@ namespace trystageClient
                 process.Start();
                 string versionOutput = process.StandardError.ReadToEnd();
                 process.WaitForExit();
+                // 更高版本的java是否可用? (My ver: java version "21.0.6" 2025-01-21 LTS)
                 // 解析版本输出 (示例输出: java version "1.8.0_301")
                 return versionOutput.Contains("version \"1.8") ||
-                       versionOutput.Contains("version \"8");
+                       versionOutput.Contains("version \"8"); // ||
+                       //versionOutput.Contains("version \"21"); //测试
             }
             catch
             {
                 return false; // java命令不存在
             }
         }
+
+        /// <summary>
+        /// 生成启动参数
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <param name="version">版本</param>
+        /// <returns>启动参数字符串</returns>
         string GenerateLaunchArgs(string username, string version)
         {
             return new StringBuilder()
                 .Append($"-Xmx2G ")
-                .Append($"-Djava.library.path={ClientLocation}/.minecraft/versions/{version}/{version}-natives ")
+                .Append($"-Djava.library.path={clientLocation}/.minecraft/versions/{version}/{version}-natives ")
                 .Append($"-cp {GetClassPath(version)} ")
                 .Append($"net.minecraft.client.main.Main ")
                 .Append($"--username {username} ")
                 .Append($"--version {version} ")
-                .Append($"--gameDir {ClientLocation}/.minecraft ")
-                .Append($"--assetsDir {ClientLocation}/.minecraft/assets ")
+                .Append($"--gameDir {clientLocation}/.minecraft ")
+                .Append($"--assetsDir {clientLocation}/.minecraft/assets ")
                 .Append($"--assetIndex 1.8 ")
                 .Append($"--uuid {GetOfflineUUID(username)} ")
                 .Append($"--accessToken 0 ")
@@ -178,6 +218,12 @@ namespace trystageClient
                 .Append($"--userType legacy")
                 .ToString();
         }
+
+        /// <summary>
+        /// 获取离线UUID
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <returns>离线UUID</returns>
         static string GetOfflineUUID(string username)
         {
             // 1. 计算用户名 MD5
@@ -188,18 +234,35 @@ namespace trystageClient
                 return new Guid(hash).ToString();
             }
         }
+
+        /// <summary>
+        /// 获取Minecraft启动程序路径
+        /// </summary>
+        /// <param name="version">版本</param>
+        /// <returns>路径</returns>
         string GetClassPath(string version)
         {
-            var libs = Directory.GetFiles($"{ClientLocation}/.minecraft/libraries/", "*.jar", SearchOption.AllDirectories);
+            var libs = Directory.GetFiles($"{clientLocation}/.minecraft/libraries/", "*.jar", SearchOption.AllDirectories);
             // 替换反斜杠为正斜杠
             var normalizedLibs = libs.Select(path => path.Replace('\\', '/'));
-            return string.Join(";", normalizedLibs) + $";{ClientLocation}/.minecraft/versions/{version}/{version}.jar";
+            return string.Join(";", normalizedLibs) + $";{clientLocation}/.minecraft/versions/{version}/{version}.jar";
         }
+
+        //窗口初始化
         public TrystageLauncher()
         {
             InitializeComponent();
-            using (Stream ico = Assembly.GetExecutingAssembly().GetManifestResourceStream("trystageClient.Trystage.ico"))
+            using (Stream ico = Assembly.GetExecutingAssembly().GetManifestResourceStream("trystageClient.Res.Trystage.ico"))
                 this.Icon = new Icon(ico);
+
+            //配置控件颜色(主要是透明度)
+            panel1.BackColor = transparentWhite;
+            TitleLabel.BackColor = transparentlyColor;
+            usrNameLabel.BackColor = transparentlyColor;
+            java8PathLabel.BackColor = transparentlyColor;
+
+            //在代码里注册UI控件
+            /*
             this.Text = "TrystageLauncher";
             this.BackgroundImageLayout = ImageLayout.Center;
             this.MaximizeBox = false;
@@ -235,7 +298,7 @@ namespace trystageClient
             this.Controls.Add(txtPlayerName);
             Label lblJavaLoc = new Label
             {
-                Text = "j8地址:",
+                Text = "Java 8地址:",
                 Font = new Font("微软雅黑", 12), // 系统自带字体
                 Location = new Point(20, 180),
                 AutoSize = true // 自动适应文字大小
@@ -244,7 +307,7 @@ namespace trystageClient
             TextBox txtJavaLocation = new TextBox
             {
                 Name = "txtJavaLocation",
-                Location = new Point(85, 180),
+                Location = new Point(115, 180),
                 Size = new Size(120, 30),
                 ForeColor = Color.DarkBlue,
                 BorderStyle = BorderStyle.Fixed3D
@@ -261,6 +324,7 @@ namespace trystageClient
             startButton.Location = new Point(100, 240); // X,Y坐标
             startButton.Size = new Size(80, 60);
             startButton.BackColor = Color.LightGray;
+            
 
             // 添加点击事件
             startButton.Click += async (sender, e) => {
@@ -283,14 +347,14 @@ namespace trystageClient
                 if (!hasCustomJava && !hasDefaultJava)
                 {
                     DialogResult result = MessageBox.Show(
-                    "你似乎没有j8,是否要安装",
-                    "需要JAVA8环境",
+                    "你似乎没有Java 8,是否要安装",
+                    "需要Java 8环境",
                     MessageBoxButtons.OKCancel, // 确定=下载，取消=取消
                     MessageBoxIcon.Question);
 
                     if (result == DialogResult.OK)
                     {
-                        MessageBox.Show("正在为您安装j8,请稍等");
+                        MessageBox.Show("正在安装Java 8...");
                         try
                         {
                             await InstallJava(); // 异步等待
@@ -298,7 +362,7 @@ namespace trystageClient
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"j8安装失败: {ex.Message}");
+                            MessageBox.Show($"Java 8 安装失败: {ex.Message}");
                         }
                         return;
                     }
@@ -307,8 +371,8 @@ namespace trystageClient
                         return;
                     }
                 }
-                    if (hasCustomJava) { JavaLocation = javalocs; }
-                    if (hasDefaultJava) { JavaLocation = installDir + "\\jre8\\bin\\java.exe"; }
+                    if (hasCustomJava) { javaLocation = javalocs; }
+                    if (hasDefaultJava) { javaLocation = installDir + "\\jre8\\bin\\java.exe"; }
                 if (!Directory.Exists(installDir + "\\.minecraft"))
                 {
                     MessageBox.Show("正在为您安装游戏本体!");
@@ -344,7 +408,7 @@ namespace trystageClient
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
-                    Arguments = $"/c \"{JavaLocation}\" {GenerateLaunchArgs(txtPlayerName.Text, ClientVersion)} & pause",
+                    Arguments = $"/c \"{javaLocation}\" {GenerateLaunchArgs(txtPlayerName.Text, clientVersion)} & pause",
                     WorkingDirectory = AppContext.BaseDirectory,
                     UseShellExecute = true
                 };
@@ -353,6 +417,140 @@ namespace trystageClient
 
             // 将按钮添加到窗体
             this.Controls.Add(startButton);
+
+            */
+        }
+
+        private async void OnStartButtonClick(object sender, EventArgs e)
+        {
+            if (txtPlayerName.TextLength == 0)
+            {
+                MessageBox.Show("用户名不可以为空!", "用户名不合规", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else if (txtPlayerName.TextLength < 3)
+            {
+                MessageBox.Show("用户名太短了!", "用户名不合规", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else if (txtPlayerName.TextLength > 16)
+            {
+                MessageBox.Show("用户名太长了!", "用户名不合规", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else if (!txtPlayerName.Text.All(c => c == '_' || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')))
+            {
+                MessageBox.Show("用户名中不可以有中文字符!", "用户名不合规", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string javalocs;
+            if (txtJavaLocation.Text != "") { javalocs = txtJavaLocation.Text; }
+            else { javalocs = "java"; }
+            bool hasCustomJava = IsJava8Installed(javalocs);
+            bool hasDefaultJava = IsJava8Installed(installDir + "\\jre8\\bin\\java.exe");
+
+            if (!hasCustomJava && !hasDefaultJava)
+            {
+                DialogResult result;
+
+                if (!hasCustomJava && java8PathLabel.Text.Length != 0)
+                {
+                    result = MessageBox.Show(
+                    "您提供的Java 8似乎无效, 是否要安装Java 8",
+                    "需要Java 8环境",
+                    MessageBoxButtons.OKCancel, // 确定=下载，取消=取消
+                    MessageBoxIcon.Question);
+                }
+                else
+                {
+                    result = MessageBox.Show(
+                    "你似乎没有Java 8, 是否要安装",
+                    "需要Java 8环境",
+                    MessageBoxButtons.OKCancel, // 确定=下载，取消=取消
+                    MessageBoxIcon.Question);
+                }
+
+                if (result == DialogResult.OK)
+                {
+                    MessageBox.Show("正在安装Java 8...");
+                    try
+                    {
+                        await InstallJava(); // 异步等待
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Java 8 安装失败: {ex.Message}");
+                    }
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            if (hasCustomJava) { javaLocation = javalocs; }
+            if (hasDefaultJava) { javaLocation = installDir + "\\jre8\\bin\\java.exe"; }
+            if (!Directory.Exists(installDir + "\\.minecraft"))
+            {
+                MessageBox.Show("正在为您安装游戏本体!");
+                await InstallClient();
+                //MessageBox.Show("安装完毕!");
+                return;
+            }
+            if (HasNewerVersion())
+            {
+                DialogResult result = MessageBox.Show(
+                "似乎有新的客户端版本",
+                "是否要安装",
+                MessageBoxButtons.OKCancel, // 确定=下载，取消=取消
+                MessageBoxIcon.Question);
+                if (result == DialogResult.OK)
+                {
+                    MessageBox.Show("正在为您安装新版本,请稍等");
+                    try
+                    {
+                        await InstallClient();
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"新客户端版本安装失败: {ex.Message}");
+                        return;
+                    }
+                }
+
+            }
+            MessageBox.Show("已找到Java和游戏本体!正在启动游戏");
+            Process process = new Process();
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/c \"{javaLocation}\" {GenerateLaunchArgs(txtPlayerName.Text, clientVersion)} & pause",
+                WorkingDirectory = AppContext.BaseDirectory,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        private void BrowseJava8(object sender, EventArgs e)
+        {
+            OpenFileDialog openJava8 = new OpenFileDialog();
+            openJava8.Filter = "可执行文件 (*.exe)|*.exe|任意文件 (*.*)|*.*";
+            openJava8.Title = "浏览Java 8文件";
+            openJava8.FilterIndex = 0;
+            openJava8.RestoreDirectory = true;
+
+            if(openJava8.ShowDialog() == DialogResult.OK)
+            {
+                string java8File = openJava8.FileName;
+                txtJavaLocation.Text = java8File;
+            }
+        }
+
+        private void ExitProgram(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
